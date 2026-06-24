@@ -196,6 +196,55 @@
     </div>
 
     <script>
+        // --- JSON DIŞA AKTAR (BACKUP) ---
+function exportToJSON() {
+    if (!appData.months || appData.months.length === 0) {
+        alert("⚠️ Yedeklenecek herhangi bir veri bulunamadı.");
+        return;
+    }
+    
+    // appData objesini metne (string) çeviriyoruz
+    const dataStr = JSON.stringify(appData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    // Otomatik bir indirme linki oluşturup tetikliyoruz
+    const exportFileDefaultName = 'Butce_Plani_Yedek_' + new Date().toISOString().slice(0, 10) + '.json';
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+}
+
+// --- JSON İÇE AKTAR (RESTORE) ---
+function importFromJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            // Basit bir veri yapısı kontrolü (Doğru dosya mı?)
+            if (importedData && Array.isArray(importedData.months)) {
+                if (confirm("⚠️ Bu işlem mevcut tarayıcı verilerinizin üzerine yazacaktır. Devam etmek istiyor musunuz?")) {
+                    appData = importedData;
+                    saveToStorage(); // Veriyi hem localStorage'a yazar hem render() eder
+                    alert("✅ Yedek başarıyla yüklendi ve tüm aylar güncellendi!");
+                }
+            } else {
+                alert("❌ Hata: Geçersiz yedek dosyası formatı.");
+            }
+        } catch (err) {
+            alert("❌ Dosya okunurken bir hata oluştu. Lütfen geçerli bir JSON dosyası seçin.");
+            console.error(err);
+        }
+        // Aynı dosyayı tekrar seçebilmek için inputu sıfırlıyoruz
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
         // --- PARA FORMATLAMA YARDIMCILARI ---
         function formatMoney(val) {
             if (val === null || val === undefined || val === '') return '';
