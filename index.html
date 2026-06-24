@@ -116,6 +116,16 @@
                 <button onclick="exportToExcel()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2">
                     📥 Excel'e Aktar
                 </button>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+    <button onclick="exportToJSON()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-3 rounded-xl shadow-sm transition text-xs flex items-center justify-center gap-1" title="Tüm verilerinizi JSON dosyası olarak bilgisayarınıza indirir">
+        💾 Veriyi Yedekle
+    </button>
+    
+    <label class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-3 rounded-xl shadow-sm transition text-xs flex items-center justify-center gap-1 cursor-pointer text-center" title="Bilgisayarınızdaki .json yedek dosyasını siteye yükler">
+        🔌 Yedeği Yükle
+        <input type="file" id="jsonFileInput" accept=".json" onchange="importFromJSON(event)" class="hidden">
+    </label>
+</div>
             </div>
         </div>
     </div>
